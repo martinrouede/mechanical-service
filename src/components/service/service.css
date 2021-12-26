@@ -1,0 +1,25 @@
+.header-service {
+    display: block;
+    margin: 25px;
+}
+
+.subheader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-dates-container {
+    display: flex;
+    width: 50%;
+    margin-bottom: 15px;
+}
+
+.label-datepicker {
+    width: 100px;
+}
+
+.row-repair {
+    max-width: 200px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}

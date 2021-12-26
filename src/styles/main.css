@@ -1,0 +1,45 @@
+.App {
+  margin: 25px;
+  align-items: center;
+  justify-content: center;
+  /*
+  height: 100vh;
+  width: 100vw;
+  */
+}
+
+.home {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 25%;
+}
+
+.table {
+  max-height: 500px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.header-typeahead {
+  display: flex;
+}
+
+.container-datepicker {
+  width: 100px;
+  margin-right: 50px;
+}
+
+.date-picker {
+  width: 100%;
+}
+
+.table-button {
+  width: 1px;
+  padding: 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 25%;
+}
