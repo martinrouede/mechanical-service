@@ -20,7 +20,6 @@ const NewService = (props) => {
     const [client, setClient] = useState([]);
     const [clientNameNoEdit, setClientNameNoEdit] = useState('');
 
-
     const [date, setDate] = useState(newDate());
     const [clientName, setClientName] = useState('');
     const [carModel, setCarModel] = useState('');
@@ -82,21 +81,23 @@ const NewService = (props) => {
                 axios.get(`http://localhost:3000/services?clientName=${clientNameNoEdit}`).then((response) => {
                     response.data.forEach(e => {
                         if (Number(params.id) === e.id) {
-                            axios.put(`http://localhost:3000/services/${params.id}`, payload).then((response) => {
-                                console.log(response);
+                            axios.put(`http://localhost:3000/services/${params.id}`, payload).then((res) => {
+                                console.log(res);
                             });
                         }
                         else {
-                            axios.put(`http://localhost:3000/services/${e.id}`, { ...e, clientName: payload.clientName }).then((response) => {
-                                console.log(response);
+                            axios.put(`http://localhost:3000/services/${e.id}`, { ...e, clientName: payload.clientName }).then((res) => {
+                                console.log(res);
                             });
                         }
-                    })
+                    });
+                    goBack();
                 });
             }
             else {
                 axios.put(`http://localhost:3000/services/${params.id}`, payload).then((response) => {
                     console.log(response);
+                    goBack();
                 });
             }
 
@@ -104,6 +105,7 @@ const NewService = (props) => {
         else {
             axios.post(`http://localhost:3000/services`, payload).then((response) => {
                 console.log(response);
+                goBack();
             });
         }
     }
@@ -111,6 +113,7 @@ const NewService = (props) => {
     const remove = (id) => {
         axios.delete(`http://localhost:3000/services/${id}`).then((response) => {
             console.log(response);
+            goBack();
         });
     }
 
