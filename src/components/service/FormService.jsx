@@ -91,7 +91,6 @@ const NewService = (props) => {
                             });
                         }
                     });
-                    goBack();
                 });
             }
             else {
