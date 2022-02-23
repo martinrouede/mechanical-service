@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios')
 
-const directoryPath = path.join(__dirname, './POR-CLIENTE/');
+const directoryPath = path.join(__dirname, '../POR-CLIENTE/');
 
 fs.readdir(directoryPath, async (err, files) => {
     if (err) {
