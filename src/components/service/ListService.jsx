@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { dateFormat, newDate } from '../../services/date';
+import { filterDuplicates, filterServices } from '../../services/utils';
 
 import { Button, Table, Form } from 'react-bootstrap';
 import '../../styles/main.css';
@@ -13,23 +14,24 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-function Search(props) {
+const ListService = (props) => {
     const navigate = useNavigate();
 
     const today = newDate();
-    const [startDate, setStartDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
-    const [endDate, setEndDate] = useState(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+
+    const [startDate, setStartDate] = useState(newDate(new Date(today.getFullYear(), today.getMonth(), 1)));
+    const [endDate, setEndDate] = useState(newDate(new Date(today.getFullYear(), today.getMonth() + 1, 0)));
     const [client, setClient] = useState([]);
 
     const [services, setServices] = useState([]);
     const [customers, setCustomers] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/services?_expand=customers&_sort=date&_order=desc&date_gte=${dateFormat(startDate)}&date_lte=${dateFormat(endDate)}`).then((response) => {
-            setServices(response.data);
+        axios.get(`http://localhost:3000/services`).then((response) => {
+            setServices(filterServices(response.data, startDate, endDate));
         });
-        axios.get(`http://localhost:3000/customers`).then((response) => {
-            setCustomers(response.data);
+        axios.get(`http://localhost:3000/services`).then((response) => {
+            setCustomers(filterDuplicates(response.data));
         });
     }, [])
 
@@ -43,10 +45,11 @@ function Search(props) {
     const search = () => {
         let filterClient = "";
         if (client.id) {
-            filterClient = `&customersId=${client.id}`;
+            filterClient = `?clientName=${client.clientName}`;
         }
-        axios.get(`http://localhost:3000/services?_expand=customers&_sort=date&_order=desc&date_gte=${dateFormat(startDate)}&date_lte=${dateFormat(endDate)}` + filterClient).then((response) => {
-            setServices(response.data);
+
+        axios.get(`http://localhost:3000/services` + filterClient).then((response) => {
+            setServices(filterServices(response.data, startDate, endDate));
         });
     };
 
@@ -58,21 +61,8 @@ function Search(props) {
         navigate(`/servicio/nuevo/`);
     }
 
-    const remove = (id) => {
-        axios.delete(`http://localhost:3000/services/${id}`).then((response) => {
-            console.log(response);
-            axios.get(`http://localhost:3000/services?_expand=customers`).then((res) => {
-                setServices(res.data);
-            });
-        });
-    }
-
     const removeClientData = () => {
         setClient([]);
-    }
-
-    const goBack = () => {
-        navigate(`/`);
     }
 
     return (
@@ -109,7 +99,7 @@ function Search(props) {
                     <div className="header-typeahead">
                         <Typeahead
                             id="basic-example"
-                            labelKey={option => `${option.name}`}
+                            labelKey={option => `${option.clientName}`}
                             onInputChange={removeClientData}
                             onChange={handleClient}
                             options={customers}
@@ -137,13 +127,12 @@ function Search(props) {
                     <tbody>
                         {services.map(e => (
                             <tr>
-                                <td>{dateFormat(e.date)}</td>
-                                <td>{e.customers.name}</td>
-                                <td>{e.customers.carModel}</td>
+                                <td>{dateFormat(e.date, 'DD/MM/YYYY')}</td>
+                                <td>{e.clientName}</td>
+                                <td>{e.carModel}</td>
                                 <td className="row-repair">{e.repair}</td>
                                 <td>{e.amount}</td>
                                 <td className="table-button"><Button onClick={() => edit(e.id)}>Editar</Button></td>
-                                <td className="table-button"><Button onClick={() => remove(e.id)}>Eliminar</Button></td>
                             </tr>
                         ))}
                         <tr>
@@ -153,16 +142,12 @@ function Search(props) {
                             <td></td>
                             <td>{services.reduce((total, e) => { return total + Number(e.amount) }, 0)}</td>
                             <td></td>
-                            <td></td>
                         </tr>
                     </tbody>
                 </Table>
             </div>
-            <Button variant="outline-primary" onClick={goBack}>
-                Volver
-            </Button>
         </>
     );
 }
 
-export default Search;
+export default ListService;
