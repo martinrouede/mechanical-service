@@ -3,9 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios')
 
-const directoryPath = path.join(__dirname, '../POR-CLIENTE/');
+const { PATH_XLS_FILES } = require('../../config');
 
-fs.readdir(directoryPath, async (err, files) => {
+fs.readdir(PATH_XLS_FILES, async (err, files) => {
     if (err) {
         return console.log('Unable to scan directory: ' + err);
     }
@@ -14,7 +14,7 @@ fs.readdir(directoryPath, async (err, files) => {
         const aResult = {};
         aResult.services = [];
 
-        const spreadsheet = xlsx.readFile(`/home/martinrouede/Documents/Proyectos-Personales/mechanical-service/src/POR-CLIENTE/${file}`);
+        const spreadsheet = xlsx.readFile(`${PATH_XLS_FILES}${file}`);
 
         let data = xlsx.utils.sheet_to_json(spreadsheet.Sheets[spreadsheet.SheetNames[0]]);
         data = data.slice(0, data.length - 1);

@@ -5,7 +5,10 @@ const path = require("path");
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const KEY_FILE = path.join(__dirname, '..', '..', '/credentials.json');
 
+const { DIRECTORY_DRIVE_ID } = require('../../config');
+
 async function backup() {
+
   const auth = await getAuthToken();
 
   const drive = google.drive({ version: 'v3', auth });

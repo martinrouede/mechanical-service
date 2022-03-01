@@ -1,8 +1,8 @@
 /node_modules
-.env
+config.js
+credentials.json
 db.json
 dist
 build
 __pycache__
 launcher.spec
-credentials.json
