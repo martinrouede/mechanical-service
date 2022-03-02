@@ -25,7 +25,7 @@ To backup the DB, an script in JS was made for upload to Google Drive the file *
 To improve the usability, an script in python was made for start the project and upload the DB backup, creating an exe file it's to easy and fast to startup the project. You can see that in `src/scripts/launcher.py`
 
 
-### Configuration
+## Configuration
 
 To be able to run the backup, first you need a file named `credentials.json` in the root of project, that you can be download when you configure the service acount in Google Console.
 
